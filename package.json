@@ -4,13 +4,14 @@
   "main": "dist/main.js",
   "scripts": {
     "test": "ava test",
-    "dev": "./node_modules/.bin/npm-run-all --parallel build watch dev:run",
-    "dev:run": "./node_modules/.bin/cross-env NODE_ENV=development electron .",
-    "dev:run:proxy": "./node_modules/.bin/cross-env http_proxy=http://127.0.0.1:9090 https_proxy=http://127.0.0.1:9090 NODE_ENV=development electron .",
+    "dev": "npm-run-all --parallel build watch dev:run",
+    "dev:run": "cross-env NODE_ENV=development electron .",
+    "dev:run:proxy": "cross-env http_proxy=http://127.0.0.1:9090 https_proxy=http://127.0.0.1:9090 NODE_ENV=development electron .",
     "postbuild": "node gen",
-    "prod": "./node_modules/.bin/cross-env NODE_ENV=production cd dist && electron .",
-    "watch": "./node_modules/.bin/gulp watch --custom=$custom",
-    "build": "./node_modules/.bin/gulp build --custom=$custom",
+    "prod": "cross-env NODE_ENV=production cd dist && electron .",
+    "watch": "gulp watch --custom=$custom",
+    "build": "gulp build --custom=$custom",
+    "build:win64": "node build-win64.js",
     "rcedit": "cp tools/rcedit-x64.exe node_modules/rcedit/bin/rcedit.exe",
     "lint": "eslint --fix app"
   },
@@ -25,6 +26,7 @@
     "angular-ui-bootstrap": "^2.3.1",
     "angular-ui-codemirror": "0.3.0",
     "angular-ui-router": "0.2.18",
+    "archiver": "^5.3.2",
     "ava": "^0.20.0",
     "babel-core": "^6.24.1",
     "babel-eslint": "^10.1.0",
@@ -85,8 +87,7 @@
   },
   "lint-staged": {
     "app/**/*.js": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   }
 }

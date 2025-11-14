@@ -149,6 +149,20 @@ make build  # build前端代码到dist目录
 make win64  # 打包win64程序， 可选: mac, linux64,linux32,win32,win64,all.
 ```
 
+**Windows 用户注意**：如果在 Windows 上运行 `make win64` 遇到环境变量错误，请查看：
+- 📖 [Windows 打包完整指南](BUILD-WIN64-CN.md) - 推荐阅读
+- 📖 [Windows 打包问题解决方案](WINDOWS-BUILD-GUIDE.md) - 详细技术说明
+
+**快速解决方案**：
+```bash
+# 方法1: 使用批处理文件（最简单）
+双击运行 build-win64.bat
+
+# 方法2: 使用 npm 脚本
+pnpm run build        # 编译前端代码
+pnpm run build:win64  # 打包 win64
+```
+
 ## 5. 代码结构
 
 ```

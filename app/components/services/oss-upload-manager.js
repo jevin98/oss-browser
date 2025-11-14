@@ -25,12 +25,42 @@ angular.module('web').factory('ossUploadManager', [
     var fs = require('fs');
     var path = require('path');
     var os = require('os');
+    var crypto = require('crypto');
 
     var stopCreatingFlag = false;
 
     var concurrency = 0;
 
     var $scope;
+
+    /**
+     * 生成6位数的hash值
+     * @param {string} str - 输入字符串
+     * @return {string} 6位hash值
+     */
+    function generate6DigitHash(str) {
+      // 使用md5生成hash，取前6位
+      var hash = crypto.createHash('md5').update(str + Date.now()).digest('hex');
+      return hash.substring(0, 6);
+    }
+
+    /**
+     * 为文件名添加hash值
+     * @param {string} fileName - 原始文件名
+     * @return {string} 添加hash后的文件名
+     */
+    function addHashToFileName(fileName) {
+      var ext = path.extname(fileName); // 获取扩展名，如 .jpg
+      var nameWithoutExt = path.basename(fileName, ext); // 获取不带扩展名的文件名
+      var hash = generate6DigitHash(fileName); // 生成6位hash
+
+      // 如果有扩展名，在扩展名前添加hash；否则直接添加在文件名后
+      if (ext) {
+        return nameWithoutExt + '_' + hash + ext;
+      } else {
+        return nameWithoutExt + '_' + hash;
+      }
+    }
 
     return {
       init: init,
@@ -264,16 +294,19 @@ angular.module('web').factory('ossUploadManager', [
             }
           });
         } else {
-          // 文件
+          // 文件 - 为文件名添加hash值
+          var fileNameWithHash = addHashToFileName(fileName);
+          var filePathWithHash = filePath.replace(fileName, fileNameWithHash);
+
           var job = createJob(authInfo, {
             region: bucketInfo.region,
             from: {
-              name: fileName,
+              name: fileName, // 本地文件名保持不变
               path: absPath
             },
             to: {
               bucket: bucketInfo.bucket,
-              key: filePath
+              key: filePathWithHash // OSS上的文件名带hash
             }
           });
 

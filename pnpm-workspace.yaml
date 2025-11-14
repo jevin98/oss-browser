@@ -1,0 +1,8 @@
+onlyBuiltDependencies:
+  - core-js
+  - electron
+  - electron-chromedriver
+  - husky
+  - protobufjs
+  - unrs-resolver
+  - ws
